@@ -1,0 +1,65 @@
+Figure:
+  + dimention()
+  + perimetr()
+  + square()
+  + squareSurface()
+  + squareBase()
+  + height()
+  + volume()
+
+Triangle : Figure
+  - a: float
+  - b: float
+  - c: float
+  + perimetr()
+  + square()
+
+Rectangle : Figure
+  - a: float
+  - b: float
+  + perimetr()
+  + square()
+
+Trapeze : Figure
+  - base1: float
+  - base2: float
+  - lateral1: float
+  - lateral2: float
+  + perimetr()
+  + square()
+
+Parallelogram : Figure
+  - side: float
+  - side2: float
+  - height: float
+  + perimetr()
+  + square()
+
+Circle : Figure
+  - r: float
+  + perimetr()
+  + square()
+
+Ball : Figure
+  - r: float
+  + volume()
+
+TriangularPyramid : Triangle
+  - height: float
+  + volume()
+
+QuadrangularPyramid : Rectangle
+  - height: float
+  + volume()
+
+RectangularParallelepiped : Rectangle
+  - c: float
+  + volume()
+
+Cone : Circle
+  - height: float
+  + volume()
+
+TriangularPrism : Triangle
+  - height: float
+  + volume()
