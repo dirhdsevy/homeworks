@@ -20,7 +20,6 @@ class Figure:
         return None if self.dimention() == 2 else self._height()
 
     def volume(self):
-        # Для 2D-фігур повертаємо площу, для 3D – об'єм
         return self._square() if self.dimention() == 2 else self._volume()
 
     def __str__(self):
