@@ -1,4 +1,5 @@
-from Rational import Rational, RationalValueError
+from Rational import Rational
+
 
 class RationalList:
     def __init__(self, elements=None):
@@ -11,7 +12,7 @@ class RationalList:
         if isinstance(value, int):
             value = Rational(value, 1)
         elif not isinstance(value, Rational):
-            raise RationalValueError("До списку можна додавати лише Rational або int")
+            raise TypeError("допустимі тільки int або Rational")
         self.data.append(value)
 
     def __getitem__(self, index):
@@ -21,7 +22,7 @@ class RationalList:
         if isinstance(value, int):
             value = Rational(value, 1)
         elif not isinstance(value, Rational):
-            raise RationalValueError("До списку можна присвоювати лише Rational або int")
+            raise TypeError("допустимі тільки int або Rational")
         self.data[index] = value
 
     def __len__(self):
@@ -35,13 +36,13 @@ class RationalList:
         elif isinstance(other, (int, Rational)):
             result.append(other)
         else:
-            raise RationalValueError("можна додавати тільки RationalList або число")
+            raise TypeError("можна додавати тільки RationalList або число")
         return result
 
     def __radd__(self, other):
         if isinstance(other, (int, Rational)):
             return RationalList([other]) + self
-        raise RationalValueError("можна додавати тільки RationalList або число")
+        raise TypeError("можна додавати тільки RationalList або число")
 
     def __iadd__(self, other):
         if isinstance(other, RationalList):
@@ -50,9 +51,44 @@ class RationalList:
         elif isinstance(other, (int, Rational)):
             self.append(other)
         else:
-            raise RationalValueError("можна додавати тільки RationalList або число")
+            raise TypeError("можна додавати тільки RationalList або число")
         return self
 
     def __iter__(self):
         sorted_data = sorted(self.data, key=lambda x: (-x.d, -x.n))
         return iter(sorted_data)
+
+
+def parse_rational(s):
+    s = s.strip()
+    if '/' in s:
+        return Rational(s)
+    return Rational(int(s), 1)
+
+
+def read_rational_list(filename):
+    lst = RationalList()
+    with open(filename, encoding='utf-8') as f:
+        for line in f:
+            for part in line.split():
+                lst.append(parse_rational(part))
+    return lst
+
+
+def sum_rational_list(lst):
+    result = Rational(0, 1)
+    for r in lst:
+        result = result + r
+    return result
+
+
+if __name__ == "__main__":
+    files = ["input01", "input02", "input03"]
+    for fname in files:
+        try:
+            rl = read_rational_list(fname)
+            print(f"\n{fname}:")
+            s = sum_rational_list(rl)
+            print(f"\nSum: {s} ({s()})")
+        except Exception as e:
+            print(f"{fname} {e}")
