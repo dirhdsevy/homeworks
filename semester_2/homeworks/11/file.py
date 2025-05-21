@@ -1,6 +1,4 @@
 import math
-import numpy as np
-
 
 def gen_seq_a(x):
     term = 1.0
@@ -31,41 +29,60 @@ def compute_product_b(n):
     return result
 
 def build_matrix_c(n, a, b):
-    M = np.zeros((n, n), dtype=float)
+    matrix = [[0.0 for _ in range(n)] for _ in range(n)]
     for i in range(n):
-        M[i, i] = a + b
+        matrix[i][i] = a + b
         if i < n - 1:
-            M[i, i + 1] = a * b
-            M[i + 1, i] = 1
-    return M
+            matrix[i][i + 1] = a * b
+            matrix[i + 1][i] = 1.0
+    return matrix
+
+def compute_determinant(matrix):
+    n = len(matrix)
+    det = 1.0
+    for i in range(n):
+        pivot = matrix[i][i]
+        if pivot == 0:
+            for j in range(i + 1, n):
+                if matrix[j][i] != 0:
+                    matrix[i], matrix[j] = matrix[j], matrix[i]
+                    det *= -1
+                    pivot = matrix[i][i]
+                    break
+        det *= pivot
+        for j in range(i + 1, n):
+            factor = matrix[j][i] / pivot
+            for k in range(i, n):
+                matrix[j][k] -= factor * matrix[i][k]
+    return det
 
 def compute_det_c(n, a, b):
-    M = build_matrix_c(n, a, b)
-    return float(np.linalg.det(M))
+    matrix = build_matrix_c(n, a, b)
+    return compute_determinant(matrix)
 
 def gen_seq_c(a, b):
-    n = 1
+    order = 1
     while True:
-        yield compute_det_c(n, a, b)
-        n += 1
+        yield compute_det_c(order, a, b)
+        order += 1
 
 def gen_seq_d():
-    a = [1, 1, 1]
+    seq = [1, 1, 1]
     k = 1
     while True:
         if k <= 3:
             yield 1
         else:
-            next_a = a[-1] + a[-3]
-            a.append(next_a)
-            yield next_a
+            next_val = seq[-1] + seq[-3]
+            seq.append(next_val)
+            yield next_val
         k += 1
 
 def compute_sum_d(n):
-    a = [0, 1, 1, 1]
+    seq = [0, 1, 1, 1]
     for k in range(4, n + 1):
-        a.append(a[k - 1] + a[k - 3])
-    return sum(a[k] / (2 ** k) for k in range(1, n + 1))
+        seq.append(seq[k - 1] + seq[k - 3])
+    return sum(seq[k] / (2 ** k) for k in range(1, n + 1))
 
 def gen_seq_e(x):
     m = 0
