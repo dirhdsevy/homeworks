@@ -1,6 +1,7 @@
 import math
 import numpy as np
 
+
 def gen_seq_a(x):
     term = 1.0
     k = 0
